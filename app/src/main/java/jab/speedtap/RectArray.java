@@ -18,20 +18,24 @@ public class RectArray {
     private int rectHeight, rectWidth;
     private Random random = new Random();
     private int drawCol;
+    private int numCol;
+    private boolean isEmptyRow;
 
-    public RectArray(int nRectHeight, int nRectWidth, int color, int row)
+    public RectArray(int nRectHeight, int nRectWidth, int color, int row, int newNumCol, boolean empty)
     {
         rectHeight = nRectHeight;
         rectWidth = nRectWidth;
+        numCol = newNumCol;
+        isEmptyRow = empty;
 
-        rects = new ColorRect[GameScreen.NUM_COL];
+        rects = new ColorRect[numCol];
 
-        for (int col = 0; col < GameScreen.NUM_COL; col++)
+        for (int col = 0; col < numCol; col++)
         {
             rects[col] = new ColorRect(rectWidth*col, rectHeight*row, rectWidth*(col+1), rectHeight*(row+1), color);
         }
         //Activate one random rectangle index to be drawn
-        drawCol = random.nextInt(GameScreen.NUM_COL);
+        drawCol = random.nextInt(numCol);
     }
 
     // Draws rectangles in random places
@@ -44,12 +48,28 @@ public class RectArray {
     //Draws rectangles without changes
     public void draw(Canvas canvas)
     {
-        rects[drawCol].draw(canvas);
+        if (!isEmptyRow)
+        {
+            rects[drawCol].draw(canvas);
+        }
+        else
+        {
+            drawAll(canvas);
+        }
+    }
+
+    public void drawAll(Canvas canvas)
+    {
+        for (int i = 0; i < numCol; i++)
+        {
+            rects[i].draw(canvas);
+        }
     }
 
     public void moveDown()
     {
-        for (int col = 0; col < GameScreen.NUM_COL; col++)
+        // Moves down coordinates of every rectangle in row
+        for (int col = 0; col < numCol; col++)
         {
             rects[col].set(rects[col].getLeft(), rects[col].getTop() + rectHeight, rects[col].getRight(), rects[col].getBottom() + rectHeight);
         }

@@ -1,9 +1,132 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="20dp"
     tools:context="jab.speedtap.MainActivity">
 
-</android.support.constraint.ConstraintLayout>
+    <TextView
+        android:id="@+id/titleTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:fontFamily="sans-serif"
+        android:padding="10dp"
+        android:text="Ultra Tap"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="50dp"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/speedButton"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignParentStart="true"
+        android:onClick="playSpeed"
+        android:padding="30dp"
+        android:text="Speed" />
+
+    <Button
+        android:id="@+id/accButton"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:onClick="playAcc"
+        android:padding="30dp"
+        android:text="Accuracy" />
+
+    <Button
+        android:id="@+id/endlessButton"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:onClick="playEndless"
+        android:padding="30dp"
+        android:text="Endless" />
+
+    <RadioGroup
+        android:id="@+id/speedRadioGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:layout_centerVertical="true"
+        android:layout_toEndOf="@+id/speedButton"
+        >
+
+        <RadioButton
+            android:id="@+id/speedRadioButton1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="20dp"
+            android:text="20" />
+
+        <RadioButton
+            android:id="@+id/speedRadioButton2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="20dp"
+            android:text="50" />
+
+        <RadioButton
+            android:id="@+id/speedRadioButton3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="20dp"
+            android:text="100" />
+    </RadioGroup>
+
+    <RadioGroup
+        android:id="@+id/accRadioGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/speedRadioGroup"
+        android:layout_toRightOf="@+id/speedRadioGroup"
+        android:layout_toStartOf="@+id/accButton"
+        android:gravity="end"
+        android:padding="10dp">
+
+        <RadioButton
+            android:id="@+id/accRadioButton1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_weight="1"
+            android:layoutDirection="rtl"
+            android:text="20"
+            android:textSize="20dp" />
+
+        <RadioButton
+            android:id="@+id/accRadioButton2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_weight="1"
+            android:layoutDirection="rtl"
+            android:text="50"
+            android:textSize="20dp" />
+
+        <RadioButton
+            android:id="@+id/accRadioButton3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_weight="1"
+            android:layoutDirection="rtl"
+            android:text="100"
+            android:textSize="20dp" />
+    </RadioGroup>
+
+</RelativeLayout>
