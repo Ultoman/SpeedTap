@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:weightSum="9">
+
+
+    <TextView
+        android:id="@+id/endGameTitleTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:fontFamily="sans-serif"
+        android:padding="10dp"
+        android:text="FINISHED"
+        android:gravity="center"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="45dp"
+        android:textStyle="bold"
+        android:layout_weight="2"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="horizontal"
+        android:layout_weight="4"
+        android:weightSum="2">
+
+        <Button
+            android:id="@+id/retryButton"
+            android:background="@color/colorAccent"
+            android:textColor="#FFFFFF"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:fontFamily="sans-serif"
+            android:text="Try Again" />
+
+        <Button
+            android:id="@+id/mainMenuButton"
+            android:background="@color/colorAccent"
+            android:textColor="#FFFFFF"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginLeft="2px"
+            android:fontFamily="sans-serif"
+            android:text="Main Menu" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:weightSum="2"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/message1TextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:text="Time: "
+            android:textColor="@color/colorPrimary"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            android:layout_weight="1"
+            android:padding="10dp" />
+
+        <TextView
+            android:id="@+id/message1ResultTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:text="3.000"
+            android:textColor="@color/colorAccent"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:padding="10dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:weightSum="2"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/message2TextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:text="Taps/Sec:"
+            android:textColor="@color/colorPrimary"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            android:layout_weight="1"
+            android:padding="10dp" />
+
+        <TextView
+            android:id="@+id/message2ResultTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:text="10"
+            android:textColor="@color/colorAccent"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:padding="10dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:weightSum="2"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/message3TextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:text="Accuracy:"
+            android:textColor="@color/colorPrimary"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            android:layout_weight="1"
+            android:padding="10dp" />
+
+        <TextView
+            android:id="@+id/message3ResultTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:text="100%"
+            android:textColor="@color/colorAccent"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:padding="10dp" />
+
+    </LinearLayout>
+
+
+
+
+</LinearLayout>

@@ -23,6 +23,7 @@ public class GameScreen extends View {
     private int numRow;
     private int totalRect;
     private int maxRect;
+    private int totalTaps = 0;
 
     private GameActivity gameActivity;
 
@@ -84,6 +85,7 @@ public class GameScreen extends View {
             // Focus on ACTION_DOWN since the game should be a "tap"
             case MotionEvent.ACTION_DOWN:
                 // Get column pressed
+                Log.d("game", "Taps: " + totalTaps);
                 touchX = (int) event.getX();
                 columnPressed = touchX / rectWidth;
                 Log.d("col","columnPressed: " + columnPressed);
@@ -97,6 +99,7 @@ public class GameScreen extends View {
                         gameActivity.startTimer();
                     }
                     correctPress = true;
+                    totalTaps++;
                     Log.d("game", "Correct column pressed!");
                 }
                 else
@@ -148,11 +151,8 @@ public class GameScreen extends View {
         drawGrid(canvas);
 
         //Check if game has ended
-        if (totalRect == -(numRow))
-        {
-            gameActivity.gameOver(true);
-        } else if (wrongPress) {
-            gameActivity.gameOver(false);
+        if (totalRect == -(numRow) || wrongPress) {
+            gameActivity.gameOver(totalRect + numRow, totalTaps);
         }
     }
 

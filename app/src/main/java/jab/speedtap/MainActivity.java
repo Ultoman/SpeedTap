@@ -16,16 +16,34 @@ public class MainActivity extends AppCompatActivity {
     private RadioGroup speedRG, accRG;
     private RadioButton speedRB1, speedRB2, speedRB3, accRB1, accRB2, accRB3;
 
-    private static final int SPEED_LOW = 20;
-    private static final int SPEED_MED = 50;
-    private static final int SPEED_HIGH = 200;
+    private static final int SPD_LOW = 20;
+    private static final int SPD_MED = 50;
+    private static final int SPD_HIGH = 200;
 
     private static final int ACC_LOW = 20;
     private static final int ACC_MED = 50;
     private static final int ACC_HIGH = 200;
 
-    private int speedNumRect = SPEED_LOW;
+    private static final int NUM_COL = 4;
+    private static final int NUM_ROW = 3;
+
+    // SPEED
+    private int speedNumRect = SPD_LOW;
+    public static final int NUM_COL_SPD = 4;
+    public static final int NUM_ROW_SPD = 3;
+    // ACCURACY
     private int accNumRect = ACC_LOW;
+    public static final int NUM_COL_ACC = 4;
+    public static final int NUM_ROW_ACC = 3;
+    // REACTION
+    /*
+    private int reactNumRect = RCT_LOW;
+    public static final int NUM_COL_RCT = 4;
+    public static final int NUM_ROW_RCT = 1;
+    */
+
+    private Intent gameIntent;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,9 +60,9 @@ public class MainActivity extends AppCompatActivity {
         accRB2 = findViewById(R.id.accRadioButton2);
         accRB3 = findViewById(R.id.accRadioButton3);
 
-        speedRB1.setText(String.valueOf(SPEED_LOW));
-        speedRB2.setText(String.valueOf(SPEED_MED));
-        speedRB3.setText(String.valueOf(SPEED_HIGH));
+        speedRB1.setText(String.valueOf(SPD_LOW));
+        speedRB2.setText(String.valueOf(SPD_MED));
+        speedRB3.setText(String.valueOf(SPD_HIGH));
         speedRB1.setChecked(true);
 
         accRB1.setText(String.valueOf(ACC_LOW));
@@ -57,13 +75,13 @@ public class MainActivity extends AppCompatActivity {
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
                 switch (i) {
                     case R.id.speedRadioButton1:
-                        speedNumRect = SPEED_LOW;
+                        speedNumRect = SPD_LOW;
                         break;
                     case R.id.speedRadioButton2:
-                        speedNumRect = SPEED_MED;
+                        speedNumRect = SPD_MED;
                         break;
                     case R.id.speedRadioButton3:
-                        speedNumRect = SPEED_HIGH;
+                        speedNumRect = SPD_HIGH;
                         break;
                 }
             }
@@ -86,6 +104,10 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+        gameIntent = new Intent(MainActivity.this, GameActivity.class);
+        gameIntent.putExtra("NUM_COL", NUM_COL);
+        gameIntent.putExtra("NUM_ROW", NUM_ROW);
     }
 
 
@@ -96,9 +118,8 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
         else {
-            Intent speedIntent = new Intent(MainActivity.this, GameActivity.class);
-            speedIntent.putExtra("NUM_RECT", speedNumRect);
-            startActivity(speedIntent);
+            gameIntent.putExtra("NUM_RECT", speedNumRect);
+            startActivity(gameIntent);
         }
     }
 
@@ -108,16 +129,15 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
         else {
-            Intent accIntent = new Intent(MainActivity.this, GameActivity.class);
-            accIntent.putExtra("NUM_RECT", accNumRect);
-            startActivity(accIntent);
+            gameIntent.putExtra("NUM_RECT", accNumRect);
+            startActivity(gameIntent);
         }
     }
 
     public void playEndless(View v)
     {
-        Intent endlessIntent = new Intent(MainActivity.this, GameActivity.class);
-        startActivity(endlessIntent);
+        gameIntent.putExtra("NUM_RECT", -1);
+        startActivity(gameIntent);
     }
 
 }
