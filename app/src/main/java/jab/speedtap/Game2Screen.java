@@ -4,28 +4,25 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.os.Handler;
-import android.os.SystemClock;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+
 import java.util.ArrayList;
-import java.util.TimerTask;
 
 
-/**
- * Created by JAB on 3/31/2018.
- */
-
-public class GameScreen extends View {
+//Differences from GameScreen
+// -- wrongPress : not needed since a press should not end game
+public class Game2Screen extends View {
     // Game data
     private int numCol;
     private int numRow;
     private int totalRect;
     private int maxRect;
     private int totalTaps = 0;
+    private int correctTaps = 0;
 
-    private GameActivity gameActivity;
+    private Game2Activity gameActivity;
 
     // Drawing variables
     private static final int GRID_WIDTH = 5;
@@ -38,10 +35,10 @@ public class GameScreen extends View {
     // onTouch variables
     private int touchX;
     private int columnPressed;
-    private boolean correctPress, wrongPress;
+    private boolean correctPress;
 
     // Constructor
-    public GameScreen(GameActivity gameAct, Context context, int newHeight, int newWidth, int newNumCol, int newNumRow, int newTotalRect) {
+    public Game2Screen(Game2Activity gameAct, Context context, int newHeight, int newWidth, int newNumCol, int newNumRow, int newTotalRect) {
         super(context);
         gameActivity = gameAct;
         // Initialize rows of rectangles
@@ -81,27 +78,26 @@ public class GameScreen extends View {
             // Focus on ACTION_DOWN since the game should be a "tap"
             case MotionEvent.ACTION_DOWN:
                 // Get column pressed
-                Log.d("game", "Taps: " + totalTaps);
+                totalTaps++;
                 touchX = (int) event.getX();
                 columnPressed = touchX / rectWidth;
                 Log.d("col","columnPressed: " + columnPressed);
 
+                //Check if correct press was first press
+                if (totalRect == maxRect - numRow && totalTaps == 1)
+                {
+                    gameActivity.startTimer();
+                }
+
                 // Check if correct column was pressed
                 if (rowArray.get(numRow - 1).myRectPressed(columnPressed))
                 {
-                    //Check if correct press was first press
-                    if (totalRect == maxRect - numRow)
-                    {
-                        gameActivity.startTimer();
-                    }
                     correctPress = true;
-                    totalTaps++;
                     Log.d("game", "Correct column pressed!");
                 }
                 else
                 {
                     correctPress = false;
-                    wrongPress = true;
                 }
                 // redraw canvas with updated flags
                 invalidate();
@@ -128,27 +124,32 @@ public class GameScreen extends View {
         if (correctPress)
         {
             moveDown();
+            correctTaps++;
             for (int row = 0; row < numRow; row++) {
-                // Every row draws their rectangle
+                // Every row draws their rand rectangle
                 rowArray.get(row).draw(canvas);
             }
         }
         // If incorrect rectangle was pressed
         else if (!(correctPress || columnPressed == -1))
         {
+            //Draw incorrect rect
             rowArray.get(numRow - 1).drawIncorrectPress(canvas, columnPressed);
+            //And then the rest
             for (int row = 0; row < numRow; row++) {
-                // Every row draws their rectangle
+                // Every row draws their rand rectangle
                 rowArray.get(row).draw(canvas);
             }
-            wrongPress = true;
         }
         // Draw grid
         drawGrid(canvas);
 
         //Check if game has ended
-        if (totalRect == -(numRow) || wrongPress) {
-            gameActivity.gameOver(totalRect + numRow, totalTaps);
+        //Change of if statement - lose after 10% miss taps
+        if (totalRect == -(numRow) || totalTaps - correctTaps == maxRect/10) {
+            Log.d("check", "totaltaps - correctTaps: " + (totalTaps - correctTaps));
+            Log.d("check", "totalRect/10: " + totalRect/10);
+            gameActivity.gameOver(totalRect + numRow, totalTaps, correctTaps);
         }
     }
 

@@ -21,9 +21,49 @@
         android:textSize="50dp"
         android:textStyle="bold" />
 
+    <TextView
+        android:id="@+id/speedHighScoreTextView"
+        android:layout_width="150dp"
+        android:layout_height="30dp"
+        android:layout_above="@+id/speedButton"
+        android:layout_alignStart="@+id/speedButton"
+        android:background="#DDDDDD"
+        android:gravity="center"
+        android:text="0000"
+        android:textColor="@color/colorAccent"
+        android:textSize="20dp"
+        android:textStyle="bold|italic" />
+
+    <TextView
+        android:id="@+id/accHighScoreTextView"
+        android:layout_width="150dp"
+        android:layout_height="30dp"
+        android:layout_above="@+id/accButton"
+        android:layout_alignStart="@+id/accButton"
+        android:background="#DDDDDD"
+        android:gravity="center"
+        android:text="0000"
+        android:textColor="@color/colorAccent"
+        android:textSize="20dp"
+        android:textStyle="bold|italic" />
+
+    <TextView
+        android:id="@+id/endlessHighScoreTextView"
+        android:layout_width="150dp"
+        android:layout_height="30dp"
+        android:layout_above="@+id/endlessButton"
+        android:layout_alignStart="@+id/endlessButton"
+        android:background="#DDDDDD"
+        android:gravity="center"
+        android:text="0000"
+        android:textColor="@color/colorAccent"
+        android:textSize="20dp"
+        android:textStyle="bold|italic" />
+
     <Button
         android:id="@+id/speedButton"
-        style="@style/Widget.AppCompat.Button.Colored"
+        android:background="@color/colorAccent"
+        android:textColor="#FFFFFF"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif"
@@ -35,7 +75,8 @@
 
     <Button
         android:id="@+id/accButton"
-        style="@style/Widget.AppCompat.Button.Colored"
+        android:background="@color/colorAccent"
+        android:textColor="#FFFFFF"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif"
@@ -47,7 +88,8 @@
 
     <Button
         android:id="@+id/endlessButton"
-        style="@style/Widget.AppCompat.Button.Colored"
+        android:background="@color/colorAccent"
+        android:textColor="#FFFFFF"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif"
@@ -56,6 +98,15 @@
         android:onClick="playEndless"
         android:padding="30dp"
         android:text="Endless" />
+
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:fontFamily="sans-serif"
+        android:onClick="about"
+        android:text="About" />
 
     <RadioGroup
         android:id="@+id/speedRadioGroup"

@@ -4,36 +4,29 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.os.Handler;
-import android.os.SystemClock;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+
 import java.util.ArrayList;
-import java.util.TimerTask;
 
-
-/**
- * Created by JAB on 3/31/2018.
- */
-
-public class GameScreen extends View {
+public class Game3Screen extends View {
     // Game data
     private int numCol;
     private int numRow;
     private int totalRect;
     private int maxRect;
     private int totalTaps = 0;
+    private int correctTaps = 0;
 
-    private GameActivity gameActivity;
+    private Game3Activity game3Activity;
 
     // Drawing variables
     private static final int GRID_WIDTH = 5;
-    private int screenHeight, screenWidth, rectHeight, rectWidth;
     private Paint gridBrush;
+    private int screenHeight, screenWidth, rectHeight, rectWidth;
     private ArrayList<RectArray> rowArray;
     private int rectColor = Color.BLACK;
-    private int emptyColor = Color.DKGRAY;
 
     // onTouch variables
     private int touchX;
@@ -41,9 +34,9 @@ public class GameScreen extends View {
     private boolean correctPress, wrongPress;
 
     // Constructor
-    public GameScreen(GameActivity gameAct, Context context, int newHeight, int newWidth, int newNumCol, int newNumRow, int newTotalRect) {
+    public Game3Screen(Game3Activity gameAct, Context context, int newHeight, int newWidth, int newNumCol, int newNumRow, int newTotalRect) {
         super(context);
-        gameActivity = gameAct;
+        game3Activity = gameAct;
         // Initialize rows of rectangles
         rowArray = new ArrayList<>(numRow);
         // Initialize flags
@@ -73,6 +66,11 @@ public class GameScreen extends View {
 
     }
 
+    public int getCorrectTaps()
+    {
+        return totalTaps;
+    }
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         // Check for touch on screen
@@ -81,7 +79,6 @@ public class GameScreen extends View {
             // Focus on ACTION_DOWN since the game should be a "tap"
             case MotionEvent.ACTION_DOWN:
                 // Get column pressed
-                Log.d("game", "Taps: " + totalTaps);
                 touchX = (int) event.getX();
                 columnPressed = touchX / rectWidth;
                 Log.d("col","columnPressed: " + columnPressed);
@@ -89,11 +86,6 @@ public class GameScreen extends View {
                 // Check if correct column was pressed
                 if (rowArray.get(numRow - 1).myRectPressed(columnPressed))
                 {
-                    //Check if correct press was first press
-                    if (totalRect == maxRect - numRow)
-                    {
-                        gameActivity.startTimer();
-                    }
                     correctPress = true;
                     totalTaps++;
                     Log.d("game", "Correct column pressed!");
@@ -103,6 +95,13 @@ public class GameScreen extends View {
                     correctPress = false;
                     wrongPress = true;
                 }
+
+                //Check if correct press was first press
+                if (totalTaps == 1)
+                {
+                    game3Activity.startTimer();
+                }
+
                 // redraw canvas with updated flags
                 invalidate();
                 break;
@@ -121,7 +120,6 @@ public class GameScreen extends View {
             for (int row = 0; row < numRow; row++) {
                 // Every row draws their rectangle in a random place
                 rowArray.get(row).drawRandom(canvas);
-                totalRect--;
             }
         }
         // If correct rectangle was pressed
@@ -147,8 +145,8 @@ public class GameScreen extends View {
         drawGrid(canvas);
 
         //Check if game has ended
-        if (totalRect == -(numRow) || wrongPress) {
-            gameActivity.gameOver(totalRect + numRow, totalTaps);
+        if (wrongPress) {
+            game3Activity.gameOver(totalTaps);
         }
     }
 
@@ -177,15 +175,9 @@ public class GameScreen extends View {
             rowArray.get(row).moveDown();
         }
 
-        if (totalRect > 0) {
+        if (totalRect == -1) {
             rowArray.set(0, new RectArray(rectHeight, rectWidth, rectColor, 0, numCol, false));
         }
-        else
-        {
-            rowArray.set(0, new RectArray(rectHeight, rectWidth, emptyColor, 0, numCol, true));
-        }
-        // Subtract from total
-        totalRect--;
     }
 
 }

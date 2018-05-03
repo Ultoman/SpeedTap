@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".AboutActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="Gameplay"
+            android:padding="5dp"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="25dp"
+            android:fontFamily="sans-serif"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorAccent"
+            android:padding="10dp"
+            android:text="@string/about_gameplay"
+            android:textSize="20dp"
+            android:fontFamily="sans-serif"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="Game Modes"
+            android:padding="5dp"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="25dp"
+            android:fontFamily="sans-serif"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Speed:"
+            android:padding="10dp"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="23dp"
+            android:fontFamily="sans-serif"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorAccent"
+            android:padding="10dp"
+            android:text="@string/about_speed"
+            android:textSize="20dp"
+            android:fontFamily="sans-serif"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Accuracy:"
+            android:padding="10dp"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="23dp"
+            android:fontFamily="sans-serif"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorAccent"
+            android:padding="10dp"
+            android:text="@string/about_accuracy"
+            android:textSize="20dp"
+            android:fontFamily="sans-serif"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Endless:"
+            android:padding="10dp"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="23dp"
+            android:fontFamily="sans-serif"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorAccent"
+            android:padding="10dp"
+            android:text="@string/about_endless"
+            android:textSize="20dp"
+            android:fontFamily="sans-serif"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@color/colorAccent"
+            android:onClick="back"
+            android:padding="20dp"
+            android:text="Back"
+            android:textColor="#FFFFFF" />
+
+    </LinearLayout>
+
+
+
+</ScrollView>

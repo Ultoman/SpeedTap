@@ -1,28 +1,35 @@
 package jab.speedtap;
 
-import android.app.ActionBar;
-import android.app.AlertDialog;
+
+
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
 import java.util.zip.Inflater;
 
 public class GameActivity extends AppCompatActivity {
+
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
+    private String highScoreKey;
 
     // Layout variables
     private RelativeLayout relativeLayout;
@@ -50,9 +57,12 @@ public class GameActivity extends AppCompatActivity {
     private long startTime;
     private long elapsedTimeMillis = 0;
     private int elapsedTimeSec;
+    private float elapsedTimeSecFloat;
+    private float estimatedElapsedSec;
     // End game variables
-    private float tps;
-    private float acc;
+    private float tps = 0;
+    private int score = 0;
+
     private Handler handler;
     // Timer runnable
     private Runnable timerRunnable = new Runnable() {
@@ -69,6 +79,9 @@ public class GameActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        sharedPreferences = getSharedPreferences("HighScores", Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
 
         //Prepare dialog
         dialog = new Dialog(this);
@@ -169,6 +182,9 @@ public class GameActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
+        View decorView = getWindow().getDecorView();
+        int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
+        decorView.setSystemUiVisibility(uiOptions);
     }
 
 
@@ -185,11 +201,12 @@ public class GameActivity extends AppCompatActivity {
     {
         elapsedTimeMillis = (SystemClock.uptimeMillis() - startTime);
         elapsedTimeSec = (int)elapsedTimeMillis/1000;
+        elapsedTimeSecFloat = (float)elapsedTimeMillis/1000;
         minutes = (elapsedTimeSec/60);
         seconds = (elapsedTimeSec%60);
         millis = (int)(elapsedTimeMillis%1000);
         secMillis = (float)seconds + (float)millis/1000;
-        Log.d("timer", "Seconds: " + seconds + " Millis: " + millis + " SecMillis: " + secMillis);
+        Log.d("timer", "SecMillis: " + secMillis + " elapsedTimeSecFloat: " + elapsedTimeSecFloat);
         if (minutes == 0) {
             return String.format("%.3f", secMillis);
         }
@@ -200,9 +217,9 @@ public class GameActivity extends AppCompatActivity {
 
     public String estimatedTime(int tapsLeft)
     {
-        float timeLeft = tapsLeft/tps;
-        Log.d("estimate", "timeLeft: " + timeLeft);
-        float estimatedElapsedSec = timeLeft + secMillis;
+        float extraTime = tapsLeft/tps;
+        Log.d("estimate", "timeLeft: " + extraTime);
+        estimatedElapsedSec = extraTime + secMillis;
         Log.d("estimate", "estimatedTime: " + estimatedElapsedSec);
         int estimatedSeconds = (int)estimatedElapsedSec % 60;
         int estimatedMinutes = (int)estimatedElapsedSec / 60;
@@ -212,7 +229,6 @@ public class GameActivity extends AppCompatActivity {
             return String.format("%.3f", estimatedSecMillis);
         else
             return estimatedMinutes + ":" + String.format("%.3f", estimatedSecMillis);
-
     }
 
     public void stopTimer()
@@ -227,21 +243,49 @@ public class GameActivity extends AppCompatActivity {
         timerText.setVisibility(View.INVISIBLE);
 
         // Divide rectangles tapped by time to get tps - taps per second
-        tps = (totalTaps/secMillis);
+        tps = (totalTaps/elapsedTimeSecFloat);
+        // Calculate score
+        score = (int)(tps * 1000);
+
+        switch (total_rect)
+        {
+            case MainActivity.SPD_ESY:
+                highScoreKey = "speed_easy_high_score";
+                break;
+            case MainActivity.SPD_MED:
+                highScoreKey = "speed_med_high_score";
+                break;
+            case MainActivity.SPD_HRD:
+                highScoreKey = "speed_hard_high_score";
+                break;
+        }
+
+        String scoreOldEncrypted = sharedPreferences.getString(highScoreKey, "0");
+        String scoreOldDecrypted = decrypt(scoreOldEncrypted);
+
+        String scoreNewEncrypted = encrypt(String.valueOf(score));
+
         Log.d("gameover", "Total taps: " + totalTaps);
-        acc = (total_rect/(float)totalTaps) * 100;
         if (tapsLeft == 0)
         {
+            if (score > Integer.valueOf(scoreOldDecrypted))
+            {
+                editor.putString(highScoreKey, scoreNewEncrypted);
+                editor.commit();
+
+                dialogMes3Result.setBackgroundColor(Color.YELLOW);
+            }
+
             //Format of winning
             // FINISHED
             // Time:  ----
             // Taps/Sec:  ----
-            //
+            // Score: ----
             dialogTitleText.setText("FINISHED");
             dialogMes1.setText("Time:");
             dialogMes1Result.setText(timerText.getText());
-            dialogMes2.setText("Taps/Sec:");
-            dialogMes2Result.setText(String.valueOf(tps));
+            dialogMes2.setText("Score:");
+            dialogMes2Result.setText(String.valueOf(score));
             dialogMes3.setVisibility(View.INVISIBLE);
             dialogMes3Result.setVisibility(View.INVISIBLE);
         }
@@ -252,17 +296,31 @@ public class GameActivity extends AppCompatActivity {
             // GAME OVER
             // Time:  ----
             // Taps Left:  ----
-            // Estimated Time: ----
+            // Estimated Score: ----
             dialogTitleText.setText("GAME OVER");
             dialogMes1.setText("Time:");
             dialogMes1Result.setText(timerText.getText());
             dialogMes2.setText("Taps Left:");
             dialogMes2Result.setText(String.valueOf(tapsLeft));
-            dialogMes3.setText("Estimated Time:");
-            dialogMes3Result.setText(estimatedTime(tapsLeft));
+            dialogMes3.setText("Estimated Score:");
+            estimatedTime(tapsLeft);
+            dialogMes3Result.setText(String.valueOf((int)((total_rect/estimatedElapsedSec) * 1000)));
         }
         dialog.show();
-        dialog.getWindow().setLayout(screenWidth/2,screenHeight);
+        dialog.getWindow().setLayout(screenWidth/2, screenHeight);
+    }
+
+    //Encryption
+    public static String encrypt(String input)
+    {
+        return Base64.encodeToString(input.getBytes(), Base64.DEFAULT);
+    }
+
+    public static String decrypt(String input)
+    {
+        if (input.equals("0"))
+            return input;
+        return new String(Base64.decode(input, Base64.DEFAULT));
     }
 
     // Important to not have multiple background threads running

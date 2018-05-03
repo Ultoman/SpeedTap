@@ -18,21 +18,20 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-public class Game2Activity extends AppCompatActivity {
+public class Game3Activity extends AppCompatActivity {
 
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
-    private String highScoreKey;
 
     // Layout variables
     private RelativeLayout relativeLayout;
-    private TextView timerText;
+    private TextView tapsText;
 
     private TextView dialogTitleText, dialogMes1, dialogMes1Result, dialogMes2, dialogMes2Result, dialogMes3, dialogMes3Result;
     private Button dialogRetryButton, dialogMainMenuButton;
 
     // Game variables
-    Game2Screen game2Screen;
+    Game3Screen game3Screen;
     private int screenHeight, screenWidth, navBarHeight, navBarId, statusBarHeight, statusBarId;
 
     // Number of columns and rows for game modes
@@ -52,8 +51,7 @@ public class Game2Activity extends AppCompatActivity {
     private int elapsedTimeSec;
     private float elapsedTimeSecFloat;
     // End game variables
-    private float tps = 0;
-    private float acc;
+    private float tps = 0.0f;
     private int score = 0;
     private Handler handler;
     // Timer runnable
@@ -61,10 +59,12 @@ public class Game2Activity extends AppCompatActivity {
         @Override
         public void run() {
 
-            timerText.setText(getTime());
+            tapsText.setText(String.valueOf(game3Screen.getCorrectTaps()));
+            getTime();
             handler.postDelayed(this, 0);
         }
     };
+
 
 
     @Override
@@ -142,29 +142,29 @@ public class Game2Activity extends AppCompatActivity {
         }
 
         // Get extras from intent
-        total_rect = getIntent().getIntExtra("NUM_RECT", 20);
+        total_rect = getIntent().getIntExtra("NUM_RECT", -1);
         numCol = getIntent().getIntExtra("NUM_COL", 4);
         numRow = getIntent().getIntExtra("NUM_ROW", 3);
 
         // Create GameScreen
-        game2Screen = new Game2Screen(Game2Activity.this, this, screenHeight, screenWidth, numCol, numRow, total_rect);
+        game3Screen = new Game3Screen(Game3Activity.this, this, screenHeight, screenWidth, numCol, numRow, total_rect);
         Log.d("dimen", "Height: " + screenHeight + " Width: " + screenWidth);
 
         // Create timer textview
-        timerText = new TextView(this);
-        timerText.setText("0.000");
-        timerText.setTextColor(getResources().getColor(R.color.colorAccent));
-        timerText.setTextSize(30);
+        tapsText = new TextView(this);
+        tapsText.setText("0");
+        tapsText.setTextColor(getResources().getColor(R.color.colorAccent));
+        tapsText.setTextSize(30);
 
         RelativeLayout.LayoutParams timerTextParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         timerTextParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
         timerTextParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-        timerText.setLayoutParams(timerTextParams);
+        tapsText.setLayoutParams(timerTextParams);
 
         // Create relative layout and fill with views
         relativeLayout = new RelativeLayout(this);
-        relativeLayout.addView(game2Screen);
-        relativeLayout.addView(timerText);
+        relativeLayout.addView(game3Screen);
+        relativeLayout.addView(tapsText);
 
         setContentView(relativeLayout);
     }
@@ -197,7 +197,7 @@ public class Game2Activity extends AppCompatActivity {
         seconds = (elapsedTimeSec%60);
         millis = (int)(elapsedTimeMillis%1000);
         secMillis = (float)seconds + (float)millis/1000;
-        Log.d("timer", "SecMillis: " + secMillis + " elapsedTimeSecFloat: " + elapsedTimeSecFloat);
+        Log.d("timer", "Seconds: " + seconds + " Millis: " + millis + " SecMillis: " + secMillis);
         if (minutes == 0) {
             return String.format("%.3f", secMillis);
         }
@@ -211,80 +211,43 @@ public class Game2Activity extends AppCompatActivity {
         handler.removeCallbacks(timerRunnable);
     }
 
-    public void gameOver(int tapsLeft, int totalTaps, int correctTaps)
+    public void gameOver(int totalTaps)
     {
         // Game ended after a winning
         stopTimer();
-        timerText.setVisibility(View.INVISIBLE);
+        tapsText.setVisibility(View.INVISIBLE);
 
         // Divide rectangles tapped by time to get tps - taps per second
-        tps = (totalTaps/elapsedTimeSecFloat);
+        if (!(elapsedTimeSecFloat == 0))
+            tps = (totalTaps/elapsedTimeSecFloat);
+        score = (int)(tps*totalTaps);
 
-        acc = (correctTaps/(float)totalTaps) * 100;
-        score = (int)(tps*1000);
-        //Accuracy multiplier
-        float accMult = ((acc - 90) * 5) + 50;
-        score = (int)(score * (accMult/100));
-        Log.d("gameover", "accMult: " + accMult + " acc: " + acc);
-
-        switch (total_rect)
-        {
-            case MainActivity.ACC_ESY:
-                highScoreKey = "acc_easy_high_score";
-                break;
-            case MainActivity.ACC_MED:
-                highScoreKey = "acc_med_high_score";
-                break;
-            case MainActivity.ACC_HRD:
-                highScoreKey = "acc_hard_high_score";
-                break;
-        }
-
-        String scoreOldEncrypted = sharedPreferences.getString(highScoreKey, "0");
+        String scoreOldEncrypted = sharedPreferences.getString("endless_high_score", "0");
         String scoreOldDecrypted = decrypt(scoreOldEncrypted);
 
         String scoreNewEncrypted = encrypt(String.valueOf(score));
 
-        if (tapsLeft == 0)
+        if (score > Integer.valueOf(scoreOldDecrypted))
         {
-            if (score > Integer.valueOf(scoreOldDecrypted))
-            {
-                editor.putString(highScoreKey, scoreNewEncrypted);
-                editor.commit();
-
-                dialogMes3Result.setBackgroundColor(Color.YELLOW);
-            }
-            //Format of winning
-            // FINISHED
-            // Time:  ----
-            // Taps/Sec:  ----
-            // Accuracy:  ----
-            dialogTitleText.setText("FINISHED");
-            dialogMes1.setText("Time:");
-            dialogMes1Result.setText(timerText.getText());
-            dialogMes2.setText("Accuracy:");
-            dialogMes2Result.setText(String.format("%.3f", acc));
-            dialogMes3.setText("Score:");
-            dialogMes3Result.setText(String.valueOf(score));
-    }
-        // Game ended after losing
-        else
-        {
-            //Format for losing
-            // GAME OVER
-            // Time:  ----
-            // Taps Left:  ----
-            // Estimated Time: ----
-            dialogTitleText.setText("GAME OVER");
-            dialogMes1.setText("Time");
-            dialogMes1Result.setText(timerText.getText());
-            dialogMes2.setText("Taps Left:");
-            dialogMes2Result.setText(String.valueOf(tapsLeft));
-            dialogMes3.setVisibility(View.INVISIBLE);
-            dialogMes3Result.setVisibility(View.INVISIBLE);
+            editor.putString("endless_high_score", scoreNewEncrypted);
+            editor.commit();
+            dialogMes3Result.setBackgroundColor(Color.YELLOW);
         }
+
+        Log.d("gameover", "Total taps: " + totalTaps);
+
+        dialogTitleText.setText("GAME END");
+        dialogMes1.setText("Total Taps:");
+        dialogMes1Result.setText(tapsText.getText());
+        dialogMes2.setText("Taps/Sec:");
+        dialogMes2Result.setText(String.format("%.3f", tps));
+        dialogMes3.setText("Score:");
+        dialogMes3Result.setText(String.valueOf(score));
+
         dialog.show();
         dialog.getWindow().setLayout(screenWidth/2,screenHeight);
+
+
     }
 
     //Encryption
