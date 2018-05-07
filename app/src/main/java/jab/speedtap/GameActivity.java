@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Handler;
@@ -27,6 +28,7 @@ import java.util.zip.Inflater;
 
 public class GameActivity extends AppCompatActivity {
 
+    //High score variables
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
     private String highScoreKey;
@@ -34,7 +36,8 @@ public class GameActivity extends AppCompatActivity {
     // Layout variables
     private RelativeLayout relativeLayout;
     private TextView timerText;
-
+    // Dialog variables
+    private Dialog dialog;
     private TextView dialogTitleText, dialogMes1, dialogMes1Result, dialogMes2, dialogMes2Result, dialogMes3, dialogMes3Result;
     private Button dialogRetryButton, dialogMainMenuButton;
 
@@ -42,13 +45,10 @@ public class GameActivity extends AppCompatActivity {
     GameScreen gameScreen;
     private int screenHeight, screenWidth, navBarHeight, navBarId, statusBarHeight, statusBarId;
 
-    // Number of columns and rows for game modes
+    // Game info
     private int numCol, numRow;
-
     private int total_rect;
 
-    // Dialog variables
-    private Dialog dialog;
     // Timer variables
     // For display
     private int minutes, seconds, millis;
@@ -83,6 +83,7 @@ public class GameActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences("HighScores", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
 
+
         //Prepare dialog
         dialog = new Dialog(this);
         dialog.setCanceledOnTouchOutside(false);
@@ -108,8 +109,8 @@ public class GameActivity extends AppCompatActivity {
         dialogRetryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                recreate();
                 dialog.dismiss();
+                recreate();
             }
         });
 
@@ -121,12 +122,18 @@ public class GameActivity extends AppCompatActivity {
             }
         });
 
+        /*****************************************************************************************/
         // Fix Height and Width issues with status bar and navigation bars
         navBarHeight = 0;
-        navBarId = getResources().getIdentifier("navigation_bar_height", "dimen", "android");
-        if (navBarId > 0) {
-            navBarHeight = getResources().getDimensionPixelSize(navBarId);
+        if (hasNavBar(getResources()))
+        {
+            navBarId = getResources().getIdentifier("navigation_bar_height", "dimen", "android");
+            if (navBarId > 0) {
+                navBarHeight = getResources().getDimensionPixelSize(navBarId);
+            }
         }
+
+
         //Log.d("dimen","navHeight: " + navBarHeight + " navID: " + navBarId);
         statusBarHeight = 0;
         statusBarId = getResources().getIdentifier("status_bar_height", "dimen", "android");
@@ -141,14 +148,16 @@ public class GameActivity extends AppCompatActivity {
         Point size = new Point();
         getWindowManager().getDefaultDisplay().getSize(size);
         screenHeight = size.y - statusBarHeight;
-        screenWidth = size.x;
+        screenWidth = size.x + navBarHeight;
 
         // Check for orientation of screen
+        /*
         if (screenHeight > screenWidth) {
             screenHeight += navBarHeight;
         } else {
             screenWidth += navBarHeight;
         }
+        */
 
         // Get extras from intent
         total_rect = getIntent().getIntExtra("NUM_RECT", 20);
@@ -178,23 +187,17 @@ public class GameActivity extends AppCompatActivity {
         setContentView(relativeLayout);
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        View decorView = getWindow().getDecorView();
-        int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
-        decorView.setSystemUiVisibility(uiOptions);
-    }
-
-
-
     public void startTimer()
     {
         startTime = SystemClock.uptimeMillis();
 
         Log.d("timer", "Game/Timer was started!");
         handler.postDelayed(timerRunnable, 0);
+    }
+
+    public void stopTimer()
+    {
+        handler.removeCallbacks(timerRunnable);
     }
 
     public String getTime()
@@ -231,11 +234,6 @@ public class GameActivity extends AppCompatActivity {
             return estimatedMinutes + ":" + String.format("%.3f", estimatedSecMillis);
     }
 
-    public void stopTimer()
-    {
-        handler.removeCallbacks(timerRunnable);
-    }
-
     public void gameOver(int tapsLeft, int totalTaps)
     {
         // Game ended after a winning
@@ -266,6 +264,7 @@ public class GameActivity extends AppCompatActivity {
         String scoreNewEncrypted = encrypt(String.valueOf(score));
 
         Log.d("gameover", "Total taps: " + totalTaps);
+        // Game ended after winning
         if (tapsLeft == 0)
         {
             if (score > Integer.valueOf(scoreOldDecrypted))
@@ -273,14 +272,13 @@ public class GameActivity extends AppCompatActivity {
                 editor.putString(highScoreKey, scoreNewEncrypted);
                 editor.commit();
 
-                dialogMes3Result.setBackgroundColor(Color.YELLOW);
+                dialogMes2Result.setBackgroundColor(Color.YELLOW);
             }
 
             //Format of winning
             // FINISHED
             // Time:  ----
-            // Taps/Sec:  ----
-            // Score: ----
+            // Score:  ----
             dialogTitleText.setText("FINISHED");
             dialogMes1.setText("Time:");
             dialogMes1Result.setText(timerText.getText());
@@ -308,6 +306,13 @@ public class GameActivity extends AppCompatActivity {
         }
         dialog.show();
         dialog.getWindow().setLayout(screenWidth/2, screenHeight);
+        //dialog.getWindow().getDecorView().setSystemUiVisibility(uiOptions);
+    }
+
+    public boolean hasNavBar (Resources resources)
+    {
+        int id = resources.getIdentifier("config_showNavigationBar", "bool", "android");
+        return id > 0 && resources.getBoolean(id);
     }
 
     //Encryption

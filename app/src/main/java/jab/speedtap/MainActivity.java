@@ -15,6 +15,9 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 public class MainActivity extends AppCompatActivity {
 
     private RadioGroup speedRG, accRG;
@@ -22,12 +25,12 @@ public class MainActivity extends AppCompatActivity {
     private TextView speedHSTV, accHSTV, endlessHSTV;
 
     public static final int SPD_ESY = 20;
-    public static final int SPD_MED = 50;
-    public static final int SPD_HRD = 100;
+    public static final int SPD_MED = 40;
+    public static final int SPD_HRD = 60;
 
-    public static final int ACC_ESY = 200;
-    public static final int ACC_MED = 350;
-    public static final int ACC_HRD = 500;
+    public static final int ACC_ESY = 100;
+    public static final int ACC_MED = 200;
+    public static final int ACC_HRD = 300;
 
     private static final int NUM_COL = 4;
     private static final int NUM_ROW = 3;
@@ -52,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         speedHSTV = findViewById(R.id.speedHighScoreTextView);
         accHSTV = findViewById(R.id.accHighScoreTextView);
         endlessHSTV = findViewById(R.id.endlessHighScoreTextView);
@@ -66,14 +70,8 @@ public class MainActivity extends AppCompatActivity {
         accRB2 = findViewById(R.id.accRadioButton2);
         accRB3 = findViewById(R.id.accRadioButton3);
 
-        speedRB1.setText(String.valueOf(SPD_ESY));
-        speedRB2.setText(String.valueOf(SPD_MED));
-        speedRB3.setText(String.valueOf(SPD_HRD));
+        // Set initial radio button to true
         speedRB1.setChecked(true);
-
-        accRB1.setText(String.valueOf(ACC_ESY));
-        accRB2.setText(String.valueOf(ACC_MED));
-        accRB3.setText(String.valueOf(ACC_HRD));
         accRB1.setChecked(true);
 
         speedRG.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -81,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
 
                 sharedPreferences = getSharedPreferences("HighScores", Context.MODE_PRIVATE);
+                // If radio button is selected, display the high score for that difficulty
                 switch (i) {
                     case R.id.speedRadioButton1:
                         speedNumRect = SPD_ESY;
@@ -106,6 +105,7 @@ public class MainActivity extends AppCompatActivity {
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
 
                 sharedPreferences = getSharedPreferences("HighScores", Context.MODE_PRIVATE);
+                // If radio button is selected, display the high score for that difficulty
                 switch (i)
                 {
                     case R.id.accRadioButton1:
@@ -132,10 +132,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
-        View decorView = getWindow().getDecorView();
-        int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
-        decorView.setSystemUiVisibility(uiOptions);
 
         sharedPreferences = getSharedPreferences("HighScores", Context.MODE_PRIVATE);
 
@@ -174,6 +170,8 @@ public class MainActivity extends AppCompatActivity {
         endlessHighScore = sharedPreferences.getString("endless_high_score", "0");
         endlessHSTV.setText(decrypt(String.valueOf(endlessHighScore)));
     }
+
+    // Game mode buttons
 
     public void playSpeed(View v)
     {

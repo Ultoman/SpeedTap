@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Handler;
@@ -99,8 +100,8 @@ public class Game2Activity extends AppCompatActivity {
         dialogRetryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                recreate();
                 dialog.dismiss();
+                recreate();
             }
         });
 
@@ -114,9 +115,12 @@ public class Game2Activity extends AppCompatActivity {
 
         // Fix Height and Width issues with status bar and navigation bars
         navBarHeight = 0;
-        navBarId = getResources().getIdentifier("navigation_bar_height", "dimen", "android");
-        if (navBarId > 0) {
-            navBarHeight = getResources().getDimensionPixelSize(navBarId);
+        if (hasNavBar(getResources()))
+        {
+            navBarId = getResources().getIdentifier("navigation_bar_height", "dimen", "android");
+            if (navBarId > 0) {
+                navBarHeight = getResources().getDimensionPixelSize(navBarId);
+            }
         }
         //Log.d("dimen","navHeight: " + navBarHeight + " navID: " + navBarId);
         statusBarHeight = 0;
@@ -173,12 +177,7 @@ public class Game2Activity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        View decorView = getWindow().getDecorView();
-        int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
-        decorView.setSystemUiVisibility(uiOptions);
     }
-
-
 
     public void startTimer()
     {
@@ -257,13 +256,13 @@ public class Game2Activity extends AppCompatActivity {
             //Format of winning
             // FINISHED
             // Time:  ----
-            // Taps/Sec:  ----
             // Accuracy:  ----
+            // Score:  ----
             dialogTitleText.setText("FINISHED");
             dialogMes1.setText("Time:");
             dialogMes1Result.setText(timerText.getText());
             dialogMes2.setText("Accuracy:");
-            dialogMes2Result.setText(String.format("%.3f", acc));
+            dialogMes2Result.setText(String.format("%.2f", acc) + "%");
             dialogMes3.setText("Score:");
             dialogMes3Result.setText(String.valueOf(score));
     }
@@ -274,7 +273,7 @@ public class Game2Activity extends AppCompatActivity {
             // GAME OVER
             // Time:  ----
             // Taps Left:  ----
-            // Estimated Time: ----
+            //
             dialogTitleText.setText("GAME OVER");
             dialogMes1.setText("Time");
             dialogMes1Result.setText(timerText.getText());
@@ -285,6 +284,12 @@ public class Game2Activity extends AppCompatActivity {
         }
         dialog.show();
         dialog.getWindow().setLayout(screenWidth/2,screenHeight);
+    }
+
+    public boolean hasNavBar (Resources resources)
+    {
+        int id = resources.getIdentifier("config_showNavigationBar", "bool", "android");
+        return id > 0 && resources.getBoolean(id);
     }
 
     //Encryption

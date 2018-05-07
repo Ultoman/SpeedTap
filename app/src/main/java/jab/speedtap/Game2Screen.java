@@ -26,8 +26,9 @@ public class Game2Screen extends View {
 
     // Drawing variables
     private static final int GRID_WIDTH = 5;
+    private static final int WRONG_WIDTH = 8;
     private int screenHeight, screenWidth, rectHeight, rectWidth;
-    private Paint gridBrush;
+    private Paint gridBrush, wrongBrush;
     private ArrayList<RectArray> rowArray;
     private int rectColor = Color.BLACK;
     private int emptyColor = Color.DKGRAY;
@@ -61,6 +62,12 @@ public class Game2Screen extends View {
         gridBrush.setColor(Color.GRAY);
         gridBrush.setStyle(Paint.Style.FILL);
         gridBrush.setStrokeWidth(GRID_WIDTH);
+        //wrongBrush
+        wrongBrush = new Paint(Paint.ANTI_ALIAS_FLAG);
+        wrongBrush.setColor(getResources().getColor(R.color.colorAccent));
+        wrongBrush.setStyle(Paint.Style.STROKE);
+        wrongBrush.setStrokeWidth(WRONG_WIDTH);
+
 
         //Fill rowArray with rectArrays
         for (int row = 0; row < numRow; row++)
@@ -118,6 +125,7 @@ public class Game2Screen extends View {
                 // Every row draws their rectangle in a random place
                 rowArray.get(row).drawRandom(canvas);
                 totalRect--;
+                drawGrid(canvas);
             }
         }
         // If correct rectangle was pressed
@@ -133,16 +141,22 @@ public class Game2Screen extends View {
         // If incorrect rectangle was pressed
         else if (!(correctPress || columnPressed == -1))
         {
-            //Draw incorrect rect
-            rowArray.get(numRow - 1).drawIncorrectPress(canvas, columnPressed);
+            // Move down for game mode 2
+            moveDown();
             //And then the rest
             for (int row = 0; row < numRow; row++) {
                 // Every row draws their rand rectangle
                 rowArray.get(row).draw(canvas);
             }
+            // Draw the incorrect grid
+            drawWrongGrid(canvas);
         }
-        // Draw grid
-        drawGrid(canvas);
+
+        if (correctPress)
+        {
+            // Draw grid
+            drawGrid(canvas);
+        }
 
         //Check if game has ended
         //Change of if statement - lose after 10% miss taps
@@ -164,6 +178,20 @@ public class Game2Screen extends View {
         for (int i = 0; i <= numRow; i++)
         {
             canvas.drawLine(0,rectHeight*i, screenWidth,rectHeight*i, gridBrush);
+        }
+    }
+
+    public void drawWrongGrid(Canvas canvas)
+    {
+        // Draw vertical grid lines
+        for (int i = 0; i <= numCol; i++)
+        {
+            canvas.drawLine(rectWidth*i,0,rectWidth*i, screenHeight, wrongBrush);
+        }
+        // Draw horizontal grid lines
+        for (int i = 0; i <= numRow; i++)
+        {
+            canvas.drawLine(0,rectHeight*i, screenWidth,rectHeight*i, wrongBrush);
         }
     }
 

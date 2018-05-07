@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "726045837507",
+    "firebase_url": "https://ultratap-highscores.firebaseio.com",
+    "project_id": "ultratap-highscores",
+    "storage_bucket": "ultratap-highscores.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:726045837507:android:947faeaffefabe1e",
+        "android_client_info": {
+          "package_name": "jab.ultratap"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "726045837507-cgrrj1gnaimuve6bc11gfpo1ghi6vpac.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "jab.ultratap",
+            "certificate_hash": "ede61b525d2435d03e265f2a61fb4a8277a0e3f7"
+          }
+        },
+        {
+          "client_id": "726045837507-oglkc1qjkur1lgbephhjs9sp4m502cg3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDr8rWW37IiVfi-F1wsB_JpOJSvSCnZVwg"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "726045837507-oglkc1qjkur1lgbephhjs9sp4m502cg3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

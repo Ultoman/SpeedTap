@@ -62,42 +62,41 @@
 
     <Button
         android:id="@+id/speedButton"
-        android:background="@color/colorAccent"
-        android:textColor="#FFFFFF"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:fontFamily="sans-serif"
         android:layout_centerVertical="true"
-        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@+id/endlessHighScoreTextView"
+        android:background="@color/colorAccent"
+        android:fontFamily="sans-serif"
         android:onClick="playSpeed"
         android:padding="30dp"
-        android:text="Speed" />
+        android:text="Speed"
+        android:textColor="#FFFFFF" />
 
     <Button
         android:id="@+id/accButton"
-        android:background="@color/colorAccent"
-        android:textColor="#FFFFFF"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:fontFamily="sans-serif"
-        android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
+        android:layout_toEndOf="@+id/endlessHighScoreTextView"
+        android:background="@color/colorAccent"
+        android:fontFamily="sans-serif"
         android:onClick="playAcc"
         android:padding="30dp"
-        android:text="Accuracy" />
+        android:text="Accuracy"
+        android:textColor="#FFFFFF" />
 
     <Button
         android:id="@+id/endlessButton"
-        android:background="@color/colorAccent"
-        android:textColor="#FFFFFF"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="@color/colorAccent"
         android:fontFamily="sans-serif"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
         android:onClick="playEndless"
         android:padding="30dp"
-        android:text="Endless" />
+        android:text="Endless"
+        android:textColor="#FFFFFF" />
 
     <Button
         android:layout_width="100dp"
@@ -110,76 +109,81 @@
 
     <RadioGroup
         android:id="@+id/speedRadioGroup"
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:layout_centerVertical="true"
-        android:layout_toEndOf="@+id/speedButton"
-        >
+        android:layout_alignStart="@+id/speedHighScoreTextView"
+        android:layout_below="@+id/speedButton"
+        android:orientation="vertical"
+        android:padding="10dp">
 
         <RadioButton
             android:id="@+id/speedRadioButton1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textSize="20dp"
-            android:text="20" />
+            android:text="EASY"
+            android:textColor="@color/colorPrimaryDark"
+            android:textStyle="bold"
+            android:textSize="20dp" />
 
         <RadioButton
             android:id="@+id/speedRadioButton2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textSize="20dp"
-            android:text="50" />
+            android:text="MEDIUM"
+            android:textColor="@color/colorPrimaryDark"
+            android:textStyle="bold"
+            android:textSize="20dp" />
 
         <RadioButton
             android:id="@+id/speedRadioButton3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textSize="20dp"
-            android:text="100" />
+            android:text="HARD"
+            android:textColor="@color/colorPrimaryDark"
+            android:textStyle="bold"
+            android:textSize="20dp" />
     </RadioGroup>
 
     <RadioGroup
         android:id="@+id/accRadioGroup"
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/speedRadioGroup"
-        android:layout_toRightOf="@+id/speedRadioGroup"
-        android:layout_toStartOf="@+id/accButton"
-        android:gravity="end"
+        android:layout_alignStart="@+id/accHighScoreTextView"
+        android:layout_below="@+id/speedButton"
+        android:orientation="vertical"
         android:padding="10dp">
 
         <RadioButton
             android:id="@+id/accRadioButton1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="end"
             android:layout_weight="1"
-            android:layoutDirection="rtl"
-            android:text="20"
+            android:text="EASY"
+            android:textColor="@color/colorPrimaryDark"
+            android:textStyle="bold"
             android:textSize="20dp" />
 
         <RadioButton
             android:id="@+id/accRadioButton2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="end"
             android:layout_weight="1"
-            android:layoutDirection="rtl"
-            android:text="50"
+            android:text="MEDIUM"
+            android:textColor="@color/colorPrimaryDark"
+            android:textStyle="bold"
             android:textSize="20dp" />
 
         <RadioButton
             android:id="@+id/accRadioButton3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="end"
             android:layout_weight="1"
-            android:layoutDirection="rtl"
-            android:text="100"
+            android:text="HARD"
+            android:textColor="@color/colorPrimaryDark"
+            android:textStyle="bold"
             android:textSize="20dp" />
     </RadioGroup>
 

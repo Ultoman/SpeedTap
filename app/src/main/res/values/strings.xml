@@ -1,15 +1,15 @@
 <resources>
     <string name="app_name">UltraTap</string>
     <string name="about_gameplay">
-        Tap the rectangle on the bottom row to advance the game. That\'s it!\nPro tip: You can tap anywhere in the column belonging to the rectangle on the bottom row.
+        Tap the black rectangle on the bottom row to advance the game. That\'s it!\nTry to go as fast as possible without messing up for the best score.\nPro tip: You can tap anywhere in the column belonging to the rectangle on the bottom row.
     </string>
     <string name="about_speed">
-        Speed mode allows you to tap as far as you can without making a single mistake.\nYou will be scored on the speed you are able to complete a string of taps.
+        Speed mode allows you to tap as far as you can without making a single mistake.\nYou will be scored on the speed you complete all of the taps.
     </string>
     <string name="about_accuracy">
-        Accuracy mode allows for some mistakes. But, if your mistakes exceed 10% of the total taps required, you will instantly lose.\nYou will be scored on speed as well as your accuracy after completing a long string of taps.\nThis mode is generally much longer than Speed.
+        Accuracy mode allows for some mistakes. But, if your mistakes exceed 10% of the total taps required, you will instantly lose.\nThe grid will flash red when you tap incorrectly.\nYou will be scored on speed as well as your accuracy after completing the taps.\nThis mode is generally much longer than Speed.
     </string>
     <string name="about_endless">
-        Endless mode has no end unless you tap an incorrect rectangle.\nYou will be scored on how fast you can tap without fail.
+        Endless mode has no end unless you tap incorrectly.\nYou will be scored on the number of taps and speed.
     </string>
 </resources>
